@@ -1,0 +1,48 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/oris
+    username: postgres
+    password: stilinski
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  mail:
+    host: smpt.gmail.com
+    username: "mironsolopov24@gmail.com"
+    password: "ttzncsknzzibtbbf"
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db-changelog.xml
+    url: jdbc:postgresql://localhost:5432/oris
+    user: postgres
+    password: stilinski
+    driver-class-name: org.postgresql.Driver
+
+
+  freemarker:
+    template-loader-path: /WEB-INF/templates/
+    suffix: .ftl
+
+mail:
+  content: "Dear {name}, please follow the link below for verify your account: <a href={url}>VERIFY<a/>"
+  from: "mironsolopov24@gmail.com"
+  sender: Test Application
+  subject: Please verify your account
+

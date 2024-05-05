@@ -1,5 +1,11 @@
 package itis.solopov.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.apache.commons.lang3.builder.EqualsExclude;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +17,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "roles")
+@Data
 public class Role {
 
     @Id
@@ -19,30 +26,12 @@ public class Role {
 
     private String name;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
     public void setUsers(Set<User> users) {
         this.users = users;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
     }
 }

@@ -1,5 +1,9 @@
 package itis.solopov.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,26 +23,47 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@Data
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    @Column
-    public String name;
-
-    @Column(unique = true)
-    public String username;
+    @Column(unique = true, nullable = false)
+    public String email;
 
     @Column(length = 64, nullable = false)
     public String password;
 
-    @Column(length = 128)
-    public String verificationCode;
+    @Column(length = 50, nullable = false)
+    public String name;
+
+    @Column(length = 2)
+    public Integer age;
+
+    @Column(length = 1)
+    public String gender;
+    @Column
+    public String sport;
+
+    @Column
+    public String photo;
+
+    @Column
+    public String experience;
+
+    @Column
+    public String description;
+
+    @ColumnDefault("0.0")
+    public Float rating;
+
+    @Column
+    public Float hourlyRate;
 
     @ColumnDefault("false")
-    public boolean enabled;
+    public String isInstructor;
 
     public Set<Role> getRoles() {
         return roles;
@@ -48,6 +73,10 @@ public class User {
         this.roles = roles;
     }
 
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "user_role",
@@ -56,64 +85,5 @@ public class User {
     )
     private Set<Role> roles;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getVerificationCode() {
-        return verificationCode;
-    }
-
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return enabled == user.enabled && Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(verificationCode, user.verificationCode) && Objects.equals(roles, user.roles);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, username, password, verificationCode, enabled, roles);
-    }
 }
+

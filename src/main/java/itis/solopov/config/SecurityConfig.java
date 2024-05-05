@@ -22,20 +22,20 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
                 .formLogin()
-                .loginPage("/sign_in")
+                .loginPage("/login")
                 .loginProcessingUrl("/login/process")
-                .usernameParameter("username")
+                .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/profile", true)
-                .failureUrl("/sign_in?error=true")
+                .failureUrl("/login?error=true")
                 .and()
                 .logout()
-                .logoutSuccessUrl("/sign_in")
+                .logoutSuccessUrl("/login")
                 .and()
                 .exceptionHandling();
 
         return httpSecurity.authorizeRequests()
-                .antMatchers("/index", "/sign_up", "/sign_in", "/hello").anonymous()
+                .antMatchers("/sign_up", "/login").anonymous()
                 .antMatchers("/profile").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and().build();

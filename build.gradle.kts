@@ -30,6 +30,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.security:spring-security-taglibs:${properties["springSecurityVersion"]}")
+    implementation("org.projectlombok:lombok:1.18.22")
+    implementation("org.projectlombok:lombok:1.18.22")
     annotationProcessor("org.hibernate:hibernate-jpamodelgen:${properties["hibernateVersion"]}")
     implementation("org.postgresql:postgresql:42.7.2")
     implementation("org.liquibase:liquibase-core:4.20.0")
@@ -48,6 +50,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-websocket")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    compileOnly("org.projectlombok:lombok:1.18.32")
+    annotationProcessor("org.projectlombok:lombok:1.18.32")
 
     implementation ("org.json:json:20211205")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

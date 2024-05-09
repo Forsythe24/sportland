@@ -1,0 +1,22 @@
+### test sign up
+POST http://localhost:8080/sign_up
+Content-Type: application/json
+
+{
+ "email": "lena@gmail.com",
+ "password": "stilinski",
+ "age": 18,
+ "gender": "M",
+ "name": "Lena"
+}
+
+### test log in
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+ "email": "lena@gmail.com",
+ "password": "stilinski"
+}
+
+###

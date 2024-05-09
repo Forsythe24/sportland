@@ -1,4 +1,4 @@
-package itis.solopov.service.impl.exception;
+package itis.solopov.service.exception;
 
 public class WrongPasswordException extends Exception {
 

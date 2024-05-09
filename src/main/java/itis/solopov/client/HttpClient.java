@@ -72,8 +72,10 @@ public class HttpClient {
                 byte[] input = jsonInput.getBytes(StandardCharsets.UTF_8);
                 out.write(input, 0, input.length);
             }
+
             String info = read(connection);
             connection.disconnect();
+
             return info;
         } catch (IOException e) {
             throw new RuntimeException(e);

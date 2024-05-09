@@ -6,13 +6,13 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) {
         HttpClient client = new HttpClient();
-        String url = "http://localhost:8080/signup";
+        String url = "http://localhost:8080/login";
         Map<String, String> map = new HashMap<>();
-        map.put("email", "gimaletdinov@gmail.com");
-        map.put("password", "hellohello");
-        map.put("name", "Miron");
-        map.put("gender", "M");
-        map.put("age", "18");
+        map.put("email", "ice@gmail.com");
+        map.put("password", "stilinski");
+//        map.put("name", "Ice");
+//        map.put("gender", "M");
+//        map.put("age", "19");
         client.post(url, map);
     }
 }

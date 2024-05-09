@@ -1,29 +1,18 @@
 package itis.solopov.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.context.annotation.Configuration;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Data
+@Setter
+@Getter
+@ToString
 public class User {
 
     @Id
@@ -59,6 +48,9 @@ public class User {
     @ColumnDefault("0.0")
     public Float rating;
 
+    @ColumnDefault("0")
+    public Integer numberOfRatings;
+
     @Column
     public Float hourlyRate;
 
@@ -74,16 +66,23 @@ public class User {
     }
 
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
-    )
+    @ElementCollection(targetClass = Role.class)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Set<Role> roles;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(name, user.name) && Objects.equals(age, user.age) && Objects.equals(gender, user.gender) && Objects.equals(sport, user.sport) && Objects.equals(photo, user.photo) && Objects.equals(experience, user.experience) && Objects.equals(description, user.description) && Objects.equals(rating, user.rating) && Objects.equals(hourlyRate, user.hourlyRate) && Objects.equals(isInstructor, user.isInstructor) && Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password, name, age, gender, sport, photo, experience, description, rating, hourlyRate, isInstructor, roles);
+    }
 }
 

@@ -1,37 +1,21 @@
 package itis.solopov.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.apache.commons.lang3.builder.EqualsExclude;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+public enum Role implements GrantedAuthority {
 
-import java.util.Set;
+    ADMIN("ADMIN"),
+    USER("USER");
 
-@Entity
-@Table(name = "roles")
-@Data
-public class Role {
+    private final String value;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Role(String value) {
+        this.value = value;
+    }
 
-    private String name;
-
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    @Override
+    public String getAuthority() {
+        return value;
     }
 }

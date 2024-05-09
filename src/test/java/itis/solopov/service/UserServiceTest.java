@@ -5,7 +5,7 @@
 //import itis.solopov.dto.UserDto;
 //import itis.solopov.model.User;
 //import itis.solopov.repository.UserRepository;
-//import itis.solopov.service.impl.UserService;
+//import itis.solopov.service.UserService;
 //import org.assertj.core.internal.bytebuddy.utility.RandomString;
 //import org.junit.jupiter.api.Assertions;
 //import org.junit.jupiter.api.BeforeEach;

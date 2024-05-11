@@ -2,7 +2,6 @@ package itis.solopov.config;
 
 import itis.solopov.filter.JwtFilter;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan("itis.solopov.security")
+//@ComponentScan("itis.solopov.security")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
@@ -59,7 +58,7 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> {
                             auth
                                     .antMatchers("api/auth/login", "api/auth/token").permitAll()
-                                    .antMatchers("/index", "/sign_up", "/login").anonymous()
+                                    .antMatchers("/index", "api/auth/sign_up", "api/user", "/login", "/instructors").anonymous()
                                     .antMatchers("/profile").hasAnyRole("USER", "ADMIN")
                                     .antMatchers("/admin/**").hasRole("ADMIN")
                                     .and().addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class);

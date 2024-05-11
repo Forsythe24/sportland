@@ -6,6 +6,11 @@ jwt:
     access: and0LnNlY3JldC5hY2Nlc3Muand0LnNlY3JldC5hY2Nlc3M=
     refresh: and0LnNlY3JldC5yZWZyZXNoLmp3dC5zZWNyZXQucmVmcmVzaA==
 
+sport-api:
+  data:
+    host: sportscore1.p.rapidapi.com
+    key: 2e7a7775femshb136a173b335463p1571a5jsn63e23d4d1928
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/semester

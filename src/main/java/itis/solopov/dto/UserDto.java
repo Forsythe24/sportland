@@ -14,7 +14,7 @@ public class UserDto {
     }
 
     public static UserDto fromEntity(User user) {
-        return new UserDto(user.name);
+        return new UserDto(user.getName());
     }
 
     @Override

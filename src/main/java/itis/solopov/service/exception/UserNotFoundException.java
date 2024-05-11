@@ -1,9 +1,9 @@
 package itis.solopov.service.exception;
 
-public class WrongPasswordException extends RuntimeException {
+public class UserNotFoundException extends RuntimeException {
 
     private final String message;
-    public WrongPasswordException(String message) {
+    public UserNotFoundException(String message) {
         this.message = message;
     }
 }

@@ -1,31 +1,37 @@
 package itis.solopov.dto;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class CreateUserRequestDto {
 
-    @NotBlank(message = "Name shouldn't be blank")
+    @NotBlank
+    private String id;
+
+    @NotBlank(message = "Name should contain at least 2 characters")
     @Size(min = 2)
-    public String name;
+    private String name;
 
     @Email
     @NotBlank(message = "Email shouldn't be blank")
-    public String email;
+    private String email;
 
     @Size(min = 8, max = 64, message = "Password should contains from 8 to 64 symbols")
-    public String password;
+    private String password;
 
 
     @NotBlank
-    public Integer age;
+    private Integer age;
 
     @NotBlank
-    public String gender;
+    private String gender;
 
-    @NotBlank
+
+    public String getId() {
+        return id;
+    }
+
     public String getEmail() {
         return email;
     }

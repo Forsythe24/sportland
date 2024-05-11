@@ -1,12 +1,13 @@
 ### test sign up
-POST http://localhost:8080/sign_up
+POST http://localhost:8080/api/auth/sign_up
 Content-Type: application/json
 
 {
+  "id": "sldkfjsdjk",
  "email": "lena@gmail.com",
  "password": "stilinski",
  "age": 18,
- "gender": "M",
+ "gender": "F",
  "name": "Lena"
 }
 
@@ -18,5 +19,8 @@ Content-Type: application/json
  "email": "lena@gmail.com",
  "password": "stilinski"
 }
+
+### test instructors api
+GET http://localhost:8080/instructors/1
 
 ###

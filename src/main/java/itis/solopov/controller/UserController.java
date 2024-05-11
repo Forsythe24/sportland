@@ -1,18 +1,14 @@
 package itis.solopov.controller;
 
-import itis.solopov.dto.CreateUserRequestDto;
-import itis.solopov.dto.JwtResponse;
-import itis.solopov.dto.LogInUserRequestDto;
+import itis.solopov.dto.UpdateUserRequestDto;
 import itis.solopov.model.User;
 import itis.solopov.service.UserService;
 import itis.solopov.service.exception.WrongPasswordException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.relation.RoleNotFoundException;
-
 @RestController
-@RequestMapping(produces = "application/json")
+@RequestMapping(path = "api", produces = "application/json")
 public class UserController {
 
     private final UserService userService;
@@ -21,13 +17,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/sign_up")
-    public ResponseEntity<User> create(@RequestBody CreateUserRequestDto requestDto) throws RoleNotFoundException {
-        return ResponseEntity.ok(userService.create(requestDto));
+    @GetMapping("user/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable String id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<User> logIn(@RequestBody LogInUserRequestDto requestDto) throws WrongPasswordException {
-        return ResponseEntity.ok(userService.logIn(requestDto));
+    @PostMapping("user/update")
+    public ResponseEntity<Boolean> updateUser(@RequestBody UpdateUserRequestDto requestDto) throws WrongPasswordException {
+        return ResponseEntity.ok(userService.updateUser(requestDto));
     }
 }

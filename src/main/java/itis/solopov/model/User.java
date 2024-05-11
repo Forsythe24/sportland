@@ -1,5 +1,6 @@
 package itis.solopov.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -16,61 +17,73 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private String id;
 
     @Column(unique = true, nullable = false)
-    public String email;
+    private String email;
 
     @Column(length = 64, nullable = false)
-    public String password;
+    private String password;
 
     @Column(length = 50, nullable = false)
-    public String name;
+    private String name;
 
     @Column(length = 2)
-    public Integer age;
+    private Integer age;
 
     @Column(length = 1)
-    public String gender;
-    @Column
-    public String sport;
+    private String gender;
+
+    @Column(name = "sport_name")
+    private String sportName;
 
     @Column
-    public String photo;
+    private String photo;
 
     @Column
-    public String experience;
+    private String experience;
 
     @Column
-    public String description;
+    private String description;
 
     @ColumnDefault("0.0")
-    public Float rating;
+    private Float rating;
 
+    @Column(name = "number_of_ratings")
     @ColumnDefault("0")
-    public Integer numberOfRatings;
+    private Integer numberOfRatings;
 
-    @Column
-    public Float hourlyRate;
+    @Column(name = "hourly_rate")
+    @ColumnDefault("0.0")
+    private Float hourlyRate;
 
+    @Column(name = "is_instructor")
     @ColumnDefault("false")
-    public String isInstructor;
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
+    private Boolean isInstructor;
 
     @ElementCollection(targetClass = Role.class)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Set<Role> roles;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    @ManyToOne
+    @JoinTable(
+            name = "user_sport",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "sport_id", referencedColumnName = "id")
+    )
+    private Sport sport;
+
+    public Sport getSport() {
+        return sport;
+    }
+    public void setSport(Sport sport) {
+        this.sport = sport;
+    }
 
     @Override
     public boolean equals(Object o) {

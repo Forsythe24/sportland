@@ -48,6 +48,10 @@ dependencies {
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.3")
+
     implementation("org.webjars:stomp-websocket:2.3.4")
     implementation("org.webjars:sockjs-client:1.5.1")
     implementation("org.webjars:jquery:3.6.0")

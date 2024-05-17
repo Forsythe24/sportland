@@ -10,8 +10,8 @@ import java.util.Set;
 public class JwtAuthentication implements Authentication {
 
     private boolean authenticated;
-    private String username;
-    private String firstName;
+    private String email;
+    private String id;
     private Set<Role> roles;
 
     public Set<Role> getRoles() {
@@ -22,20 +22,20 @@ public class JwtAuthentication implements Authentication {
         this.roles = roles;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getId() {
+        return id;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
@@ -45,17 +45,18 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public Object getCredentials() {
-        return null;
+        return email;
     }
 
     @Override
     public Object getDetails() {
-        return null;
+
+        return email;
     }
 
     @Override
     public Object getPrincipal() {
-        return username;
+        return email;
     }
 
     @Override
@@ -70,6 +71,6 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        return firstName;
+        return id;
     }
 }

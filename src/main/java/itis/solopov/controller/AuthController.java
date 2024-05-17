@@ -1,15 +1,12 @@
 package itis.solopov.controller;
 
+import itis.solopov.AuthManager;
 import itis.solopov.dto.*;
 import itis.solopov.model.User;
 import itis.solopov.service.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.management.relation.RoleNotFoundException;
 import javax.security.auth.message.AuthException;
 
 @RestController
@@ -17,9 +14,11 @@ import javax.security.auth.message.AuthException;
 public class AuthController {
 
     private final AuthService authService;
+    private final AuthManager authManager;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, AuthManager authManager) {
         this.authService = authService;
+        this.authManager = authManager;
     }
 
     @PostMapping("login")
@@ -34,19 +33,21 @@ public class AuthController {
 
     @PostMapping("refresh")
     public ResponseEntity<JwtResponse> refresh(@RequestBody RefreshJwtRequest jwtRequest) throws AuthException {
-        return ResponseEntity.ok(authService.refresh(jwtRequest.getToken()));
+        System.out.println(jwtRequest.getToken());
+       return ResponseEntity.ok(authService.refresh(jwtRequest.getToken()));
     }
 
     @PostMapping("sign_up")
-    public ResponseEntity<User> create(@RequestBody CreateUserRequestDto requestDto) throws RoleNotFoundException {
-        System.out.println(requestDto);
+    public ResponseEntity<User> create(@RequestBody CreateUserRequestDto requestDto) {
         return ResponseEntity.ok(authService.create(requestDto));
     }
 
-    @PostMapping("verify")
-    public ResponseEntity<Boolean> verifyCredentials(@RequestBody VerifyCredentialsRequestDto requestDto) {
-        System.out.println(requestDto.getPassword());
-        System.out.println(requestDto.getEmail());
-        return ResponseEntity.ok(authService.verifyCredentials(requestDto));
+    @PostMapping("send_new_password")
+    public ResponseEntity<okhttp3.ResponseBody> sendNewPasswordOnEmail(@RequestBody SendNewPasswordRequestDto requestDto) {
+//        try {
+            return ResponseEntity.ok(authService.sendNewPasswordOnEmail(requestDto));
+//        } catch (Exception ex) {
+//
+//        }
     }
 }

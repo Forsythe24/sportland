@@ -42,9 +42,13 @@ dependencies {
     implementation("javax.servlet.jsp:jsp-api:2.1")
     implementation("javax.mail:javax.mail-api:1.6.2")
 
+    implementation ("org.apache.commons:commons-lang3:3.12.0")
+
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+    implementation("com.github.mifmif:generex:1.0.1")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 

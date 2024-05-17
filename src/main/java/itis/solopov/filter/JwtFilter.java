@@ -2,6 +2,7 @@ package itis.solopov.filter;
 
 import io.jsonwebtoken.Claims;
 import itis.solopov.model.Role;
+import itis.solopov.repository.RoleRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -11,11 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Component
 public class JwtFilter extends GenericFilterBean {
@@ -25,21 +23,37 @@ public class JwtFilter extends GenericFilterBean {
 
     private final JwtProvider jwtProvider;
 
-    public JwtFilter(JwtProvider jwtProvider) {
+    private final RoleRepository roleRepository;
+
+    public JwtFilter(JwtProvider jwtProvider, RoleRepository roleRepository) {
         this.jwtProvider = jwtProvider;
+        this.roleRepository = roleRepository;
     }
 
-    public static JwtAuthentication generate(Claims claims) {
+    public JwtAuthentication generate(Claims claims) {
         JwtAuthentication jwtAuthentication = new JwtAuthentication();
         jwtAuthentication.setRoles(getRoles(claims));
-        jwtAuthentication.setUsername(claims.getSubject());
-        jwtAuthentication.setFirstName(claims.get("forstName", String.class));
+        jwtAuthentication.setEmail(claims.getSubject());
+        jwtAuthentication.setId(claims.get("id", String.class));
+
         return jwtAuthentication;
     }
 
-    private static Set<Role> getRoles(Claims claims) {
-        List<String> roles = claims.get("roles", List.class);
-        return roles.stream().map(Role::valueOf).collect(Collectors.toSet());
+    private Set<Role> getRoles(Claims claims) {
+        System.out.println(claims.get("roles"));
+//        List<String> roleNames = claims.get("roles", List.class);
+
+        List<HashMap<String, Object>> roleMaps = claims.get("roles", List.class);
+
+        Set<Role> roles = new HashSet<>();
+
+        for (HashMap<String, Object> roleMap : roleMaps) {
+            Role role = new Role();
+            role.setId((Integer) roleMap.get("id"));
+            role.setName((String) roleMap.get("name"));
+            roles.add(role);
+        }
+        return roles;
     }
 
     @Override
@@ -49,6 +63,7 @@ public class JwtFilter extends GenericFilterBean {
             if (jwtProvider.validateAccessToken(token)) {
                 Claims claims = jwtProvider.getAcessClaims(token);
                 JwtAuthentication jwtAuthentication = generate(claims);
+                System.out.println(claims);
                 jwtAuthentication.setAuthenticated(true);
                 SecurityContextHolder.getContext().setAuthentication(jwtAuthentication);
             }
@@ -59,7 +74,7 @@ public class JwtFilter extends GenericFilterBean {
     private String getTokenFromRequest(HttpServletRequest request) {
         String bearer = request.getHeader(AUTHORIZATION_HEADER);
         if (bearer != null && bearer.startsWith(BEARER)) {
-            return bearer.substring(BEARER.length());
+            return bearer.substring(BEARER.length() + 1);
         }
         return null;
     }

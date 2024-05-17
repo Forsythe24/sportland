@@ -1,7 +1,9 @@
 package itis.solopov.controller;
 
+import itis.solopov.AuthManager;
 import itis.solopov.model.User;
 import itis.solopov.service.InstructorService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,14 +17,20 @@ import java.util.List;
 public class InstructorController {
 
     private final InstructorService instructorService;
+    private final AuthManager authManager;
 
-    public InstructorController(InstructorService instructorService) {
+
+    public InstructorController(InstructorService instructorService, AuthManager authManager) {
         this.instructorService = instructorService;
+        this.authManager = authManager;
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<List<User>> getInstructorsBySportId(@PathVariable int id) {
-        System.out.println(id);
-        return ResponseEntity.ok(instructorService.getInstructorsBySportId(id));
+    @GetMapping("{sportId}")
+    public ResponseEntity<List<User>> getInstructorsBySportId(@PathVariable int sportId) {
+        if (authManager.isAuthorized()) {
+            return ResponseEntity.ok(instructorService.getInstructorsBySportId(sportId));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 }

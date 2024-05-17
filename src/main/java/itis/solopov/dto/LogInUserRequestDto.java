@@ -7,9 +7,9 @@ public class LogInUserRequestDto {
 
     @Email
     @NotBlank(message = "Email shouldn't be blank")
-    public String email;
+    private String email;
 
-    public String password;
+    private String password;
 
     @NotBlank
     public String getEmail() {

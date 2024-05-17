@@ -26,7 +26,10 @@ public interface UserRepository extends JpaRepository<User, String> {
     List<User> findAllBySportId(Integer sportId);
 
     @Modifying
-    @Transactional
-    @Query("update User u set u.password = ?1, u.name = ?2, u.age = ?3, u.gender = ?4, u.photo = ?5, u.experience = ?6, u.description = ?7, u.rating = ?8, u.numberOfRatings = ?9, u.hourlyRate = ?10, u.isInstructor = ?11, u.sportName = ?12 where u.id = ?13")
-    void updateUser(String password, String name, Integer age, String gender, String photo, String experience, String description, Float rating, Integer numberOfRatings, Float hourlyRate, Boolean isInstructor, String sportName, String id);
+    @Query("update User u set u.name = ?1, u.age = ?2, u.gender = ?3, u.photo = ?4, u.experience = ?5, u.description = ?6, u.rating = ?7, u.numberOfRatings = ?8, u.hourlyRate = ?9, u.isInstructor = ?10, u.sportName = ?11 where u.id = ?12")
+    void updateUser(String name, Integer age, String gender, String photo, String experience, String description, Float rating, Integer numberOfRatings, Float hourlyRate, Boolean isInstructor, String sportName, String id);
+
+    @Modifying
+    @Query("update User u set u.password = ?1 where u.email = ?2")
+    void updatePassword(String password, String email);
 }

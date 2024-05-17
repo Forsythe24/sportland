@@ -1,11 +1,10 @@
 package itis.solopov.dto;
 
-import javax.validation.constraints.NotBlank;
+public class UpdatePasswordRequestDto {
 
-public class VerifyCredentialsRequestDto {
-    @NotBlank
-    private String email;
-    private String password;
+    public String email;
+
+    public String password;
 
     public String getEmail() {
         return email;

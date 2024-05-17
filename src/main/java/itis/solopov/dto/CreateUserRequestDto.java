@@ -6,9 +6,6 @@ import javax.validation.constraints.Size;
 
 public class CreateUserRequestDto {
 
-    @NotBlank
-    private String id;
-
     @NotBlank(message = "Name should contain at least 2 characters")
     @Size(min = 2)
     private String name;
@@ -26,11 +23,6 @@ public class CreateUserRequestDto {
 
     @NotBlank
     private String gender;
-
-
-    public String getId() {
-        return id;
-    }
 
     public String getEmail() {
         return email;

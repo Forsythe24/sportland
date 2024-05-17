@@ -28,7 +28,7 @@ public class User {
     @Column(length = 50, nullable = false)
     private String name;
 
-    @Column(length = 2)
+    @Column(length = 2, nullable = false)
     private Integer age;
 
     @Column(length = 1)
@@ -61,10 +61,15 @@ public class User {
     @ColumnDefault("false")
     private Boolean isInstructor;
 
-    @ElementCollection(targetClass = Role.class)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+    )
     private Set<Role> roles;
 
     @ToString.Exclude

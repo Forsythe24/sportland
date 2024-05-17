@@ -30,26 +30,6 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.csrf().disable()
-//                .formLogin()
-//                .loginPage("/login")
-//                .loginProcessingUrl("/login/process")
-//                .usernameParameter("email")
-//                .passwordParameter("password")
-//                .defaultSuccessUrl("/user", true)
-//                .failureUrl("/login?error=true")
-//                .and()
-//                .logout()
-//                .logoutSuccessUrl("/login")
-//                .and()
-//                .exceptionHandling();
-//
-//        return httpSecurity.authorizeRequests()
-//                .antMatchers("/sign_up", "/login").anonymous()
-//                .antMatchers("/user").hasAnyRole("USER", "ADMIN")
-//                .antMatchers("/admin/**").hasRole("ADMIN")
-//                .and().build();
-
         return httpSecurity.httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement()
@@ -58,8 +38,8 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> {
                             auth
                                     .antMatchers("api/auth/login", "api/auth/token").permitAll()
-                                    .antMatchers("/index", "api/auth/sign_up", "api/user", "/login", "/instructors").anonymous()
-                                    .antMatchers("/profile").hasAnyRole("USER", "ADMIN")
+                                    .antMatchers("/index", "api/auth/sign_up", "/login", "api/user/*").anonymous()
+                                    .antMatchers("/profile", "api/instructors/*").hasAnyRole("ADMIN")
                                     .antMatchers("/admin/**").hasRole("ADMIN")
                                     .and().addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class);
                         }

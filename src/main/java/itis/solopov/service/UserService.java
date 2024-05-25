@@ -11,8 +11,8 @@ import itis.solopov.repository.SportRepository;
 import itis.solopov.repository.UserRepository;
 import itis.solopov.service.exception.SportNotFoundException;
 import itis.solopov.service.exception.UserNotFoundException;
+import itis.solopov.util.Constants;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,7 @@ public class UserService {
 
     public UserDto getUserById(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(String.format(Constants.USER_NOT_FOUND_EXCEPTION_ID_TEMPLATE, id)));
 
         UserDto userDto = new UserDto();
         userDto.setAge(user.getAge());
@@ -57,7 +57,7 @@ public class UserService {
     public Boolean updateUser(UpdateUserRequestDto dto) {
 
         User user = userRepository.findById(dto.getId())
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(String.format(Constants.USER_NOT_FOUND_EXCEPTION_ID_TEMPLATE, dto.getId())));
 
         Sport sport = null;
         if (dto.getSportName() != null) {
@@ -86,14 +86,13 @@ public class UserService {
 
     public Boolean verifyCredentials(VerifyCredentialsRequestDto dto) {
         User user = userRepository.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException(dto.getEmail()));
+                .orElseThrow(() -> new UserNotFoundException(String.format(Constants.USER_NOT_FOUND_EXCEPTION_EMAIL_TEMPLATE, dto.getEmail())));
 
         return encoder.matches(dto.getPassword(), user.getPassword());
     }
 
     @Transactional
     public Boolean updatePassword(UpdatePasswordRequestDto dto) {
-        System.out.println(dto.getPassword() + " " + dto.getEmail());
         userRepository.updatePassword(encoder.encode(dto.getPassword()), dto.getEmail());
         return true;
     }

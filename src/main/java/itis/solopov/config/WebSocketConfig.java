@@ -12,12 +12,12 @@ package itis.solopov.config;
 
      @Override
      public void registerStompEndpoints(StompEndpointRegistry registry) {
-         registry.addEndpoint("/message-websocket").withSockJS();
+         registry.addEndpoint("/api/message-websocket").withSockJS();
      }
 
      @Override
      public void configureMessageBroker(MessageBrokerRegistry registry) {
          registry.enableSimpleBroker("/topic");
-         registry.setApplicationDestinationPrefixes("/app");
+         registry.setApplicationDestinationPrefixes("/api");
      }
  }

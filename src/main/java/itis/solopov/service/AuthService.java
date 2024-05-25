@@ -10,11 +10,14 @@ import itis.solopov.model.Role;
 import itis.solopov.model.User;
 import itis.solopov.repository.RoleRepository;
 import itis.solopov.repository.UserRepository;
+import itis.solopov.service.exception.UserAlreadyExistsException;
+import itis.solopov.service.exception.UserNotFoundException;
+import itis.solopov.service.exception.WrongPasswordException;
 import itis.solopov.util.Constants;
 import lombok.SneakyThrows;
 import okhttp3.*;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,13 +53,8 @@ public class AuthService {
 
 
     public JwtResponse login(JwtRequest request) {
-        System.out.println(request.getUsername());
         User user = userRepository.findByEmail(request.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException(request.getUsername()));
-
-        //asfdi%Ttd%y"
-
-//        System.out.println(passwordEncoder.matches(request.getPassword(), user.getPassword()));
+                .orElseThrow(() -> new UserNotFoundException(String.format(Constants.USER_NOT_FOUND_EXCEPTION_EMAIL_TEMPLATE, request.getUsername())));
 
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             String accessToken = jwtProvider.generateAccessToken(user);
@@ -64,7 +62,7 @@ public class AuthService {
             refreshStorage.put(user.getEmail(), refreshToken);
             return new JwtResponse(accessToken, refreshToken);
         }
-        return null;
+        throw new WrongPasswordException("Wrong password for " + request.getUsername());
     }
 
     public JwtResponse refresh(String refreshToken) throws AuthException {
@@ -124,20 +122,23 @@ public class AuthService {
         }
         user.setRoles(roles);
 
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException ex) {
+            throw new UserAlreadyExistsException("User with such email already exists");
+        }
     }
 
     @Transactional
     @SneakyThrows
     public ResponseBody sendNewPasswordOnEmail(SendNewPasswordRequestDto dto) {
         User user = userRepository.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException(dto.getEmail()));
+                .orElseThrow(() -> new UserNotFoundException(String.format(Constants.USER_NOT_FOUND_EXCEPTION_EMAIL_TEMPLATE, dto.getEmail())));
 
         MediaType mediaType = MediaType.parse("application/json");
 
         char[] possibleCharacters = (Constants.PASSWORD_CHAR_SET).toCharArray();
         String newPassword = RandomStringUtils.random( 12, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom());
-        System.out.println( newPassword );
 
         RequestBody body = RequestBody.create(mediaType, String.format(Constants.NEW_PASSWORD_LETTER_TEMPLATE, user.getEmail(), user.getName(), newPassword));
 
@@ -146,7 +147,7 @@ public class AuthService {
                 .post(body)
                 .addHeader("x-rapidapi-key", Constants.API_KEY)
                 .addHeader("x-rapidapi-host", Constants.API_HOST)
-                .addHeader("Content-Type", "application/json")
+                .addHeader("Content-Type", Constants.CONTENT_TYPE_APPLICATION_JSON)
                 .build();
 
         userRepository.updatePassword(encoder.encode(newPassword), dto.getEmail());

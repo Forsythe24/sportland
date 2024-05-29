@@ -3,10 +3,10 @@ package itis.solopov.dto;
 import javax.validation.constraints.NotBlank;
 
 public class CreateMessageRequestDto {
-    @NotBlank
+    @NotBlank(message = "Chat id must not be blank")
     private String chatId;
 
-    @NotBlank
+    @NotBlank(message = "Sender id must not be blank")
     private String senderId;
 
     private String text;

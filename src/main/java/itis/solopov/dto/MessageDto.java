@@ -1,16 +1,24 @@
 package itis.solopov.dto;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import javax.validation.constraints.NotBlank;
+
+@Schema(description = "Пользователь")
 public class MessageDto {
 
     private Long id;
 
+    @NotBlank(message = "Chat id must not be blank")
     private String chatId;
 
+    @NotBlank(message = "Sender id must not be blank")
     private String senderId;
 
     private String text;
 
+    @NotBlank(message = "Date must not be blank")
     private String date;
     public Long getId() {
         return id;

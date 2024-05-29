@@ -53,6 +53,11 @@ public class UserService {
         return userDto;
     }
 
+    public Boolean deleteUserById(String id) {
+        userRepository.deleteById(id);
+        return true;
+    }
+
     @Transactional
     public Boolean updateUser(UpdateUserRequestDto dto) {
 

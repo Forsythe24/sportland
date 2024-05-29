@@ -56,6 +56,7 @@ dependencies {
 
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.3")
 
+    implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
     implementation("dev.gustavoavila:java-android-websocket-client:2.0.2")
 
     implementation("org.webjars:stomp-websocket:2.3.4")

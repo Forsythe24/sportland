@@ -1,5 +1,7 @@
 package itis.solopov.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import itis.solopov.AuthManager;
 import itis.solopov.dto.CreateChatRequestDto;
 import itis.solopov.dto.CreateMessageRequestDto;
@@ -12,13 +14,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Chat")
 @RestController
-//@PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+@PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
 @RequestMapping("api/chat")
 public class ChatController {
 
@@ -31,21 +36,25 @@ public class ChatController {
         this.authManager = authManager;
     }
 
+    @Operation(description = "Get chat by id")
     @GetMapping("{id}")
     public ResponseEntity<Chat> getChatById(@PathVariable String id) {
         return ResponseEntity.ok(chatService.getChatById(id));
     }
 
+    @Operation(description = "Create a new chat")
     @PostMapping("create")
     public ResponseEntity<Boolean> createChat(@RequestBody CreateChatRequestDto requestDto) {
         return ResponseEntity.ok(chatService.createChat(requestDto));
     }
 
+    @Operation(description = "Create a new message")
     @PostMapping("add_message")
-    public ResponseEntity<Message> createMessage(@RequestBody CreateMessageRequestDto requestDto) {
+    public ResponseEntity<Message> createMessage(@RequestBody @Validated CreateMessageRequestDto requestDto) {
         return ResponseEntity.ok(chatService.createMessage(requestDto));
     }
 
+    @Operation(description = "Get all chats by user id")
     @GetMapping("all")
     public ResponseEntity<List<Chat>> getAllChatsByUserId() {
         Authentication authentication = authManager.extractAuthentication();
@@ -58,11 +67,13 @@ public class ChatController {
         }
     }
 
+    @Operation(description = "Get all the messages of the chat by providing its's id")
     @GetMapping("{chatId}/messages")
     public ResponseEntity<List<MessageDto>> getAllMessagesByChatId(@PathVariable String chatId) {
         return ResponseEntity.ok(chatService.getAllMessagesByChatId(chatId));
     }
 
+    @Operation(description = "Get last message of the chat by providing its' id")
     @GetMapping("{chatId}/last_message")
     public ResponseEntity<Message> getLastMessageByChatId(@PathVariable String chatId) {
         return ResponseEntity.ok(chatService.getLastMessageByChatId(chatId));
@@ -70,7 +81,7 @@ public class ChatController {
 
     @MessageMapping("/chat/{chatId}/add_message")
     @SendTo("/topic/chat/{chatId}/messages")
-    public MessageDto message(MessageDto message) {
+    public MessageDto message(@Validated MessageDto message) {
         return message;
     }
 }

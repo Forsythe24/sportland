@@ -1,9 +1,9 @@
 package itis.solopov.dto;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Email;
 
 public class SendNewPasswordRequestDto {
-    @NotBlank
+    @Email
     private String email;
     public String getEmail() {
         return email;

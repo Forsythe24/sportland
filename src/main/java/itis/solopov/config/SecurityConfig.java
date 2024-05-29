@@ -39,7 +39,7 @@ public class SecurityConfig {
                             auth
                                     .antMatchers("api/auth/login", "api/auth/token").permitAll()
                                     .antMatchers("/index", "api/auth/sign_up", "/login", "api/user/*").anonymous()
-                                    .antMatchers("/profile", "api/instructors/*").hasAnyRole("ADMIN")
+                                    .antMatchers("/profile", "api/instructors/*").hasAnyAuthority("ADMIN")
                                     .antMatchers("/admin/**").hasRole("ADMIN")
                                     .and().addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class);
                         }

@@ -1,14 +1,15 @@
 package itis.solopov.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -99,19 +100,6 @@ public class User {
     }
     public void setSport(Sport sport) {
         this.sport = sport;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(name, user.name) && Objects.equals(age, user.age) && Objects.equals(gender, user.gender) && Objects.equals(sport, user.sport) && Objects.equals(photo, user.photo) && Objects.equals(experience, user.experience) && Objects.equals(description, user.description) && Objects.equals(rating, user.rating) && Objects.equals(hourlyRate, user.hourlyRate) && Objects.equals(isInstructor, user.isInstructor) && Objects.equals(roles, user.roles);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email, password, name, age, gender, sport, photo, experience, description, rating, hourlyRate, isInstructor, roles);
     }
 }
 

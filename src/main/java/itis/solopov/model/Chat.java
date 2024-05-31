@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -25,7 +26,6 @@ public class Chat {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "chat_user",
@@ -40,4 +40,17 @@ public class Chat {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "chat", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Message> messages;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Chat chat = (Chat) o;
+        return Objects.equals(id, chat.id) && Objects.equals(user, chat.user) && Objects.equals(messages, chat.messages);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, user, messages);
+    }
 }

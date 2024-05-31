@@ -23,6 +23,9 @@ public class Message {
     @Column(name = "sender_id")
     private String senderId;
 
+    @Column(name = "chat_id")
+    private String chatId;
+
     private String text;
 
     private String date;

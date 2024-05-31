@@ -54,9 +54,10 @@ public class UserService {
         return userDto;
     }
 
+    @Transactional
     public Boolean deleteUserById(String id) {
-        userRepository.deleteById(id);
         chatRepository.deleteAllChatUsers(id);
+        userRepository.deleteById(id);
         chatRepository.deleteAllChatsByUserId(id);
         return true;
     }

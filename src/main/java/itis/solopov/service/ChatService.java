@@ -64,6 +64,7 @@ public class ChatService {
         Message message = new Message();
         message.setText(dto.getText());
         message.setDate(dto.getDate());
+        message.setChatId(dto.getChatId());
         message.setSenderId(dto.getSenderId());
 
         Chat chat = chatRepository.findById(dto.getChatId())
@@ -77,6 +78,7 @@ public class ChatService {
         return messageRepository.getAllByChatId(chatId).stream().map(message -> {
                     MessageDto dto = new MessageDto();
                     dto.setId(message.getId());
+                    dto.setChatId(chatId);
                     dto.setSenderId(message.getSenderId());
                     dto.setText(message.getText());
                     dto.setDate(message.getDate());

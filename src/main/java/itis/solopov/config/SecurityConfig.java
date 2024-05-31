@@ -13,7 +13,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-//@ComponentScan("itis.solopov.security")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
@@ -38,9 +37,7 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> {
                             auth
                                     .antMatchers("api/auth/login", "api/auth/token").permitAll()
-                                    .antMatchers("/index", "api/auth/sign_up", "/login", "api/user/*").anonymous()
-                                    .antMatchers("/profile", "api/instructors/*").hasAnyAuthority("ADMIN")
-                                    .antMatchers("/admin/**").hasRole("ADMIN")
+                                    .antMatchers("api/auth/sign_up", "api/auth/login").anonymous()
                                     .and().addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class);
                         }
                 )

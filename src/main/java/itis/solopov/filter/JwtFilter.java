@@ -40,9 +40,6 @@ public class JwtFilter extends GenericFilterBean {
     }
 
     private Set<Role> getRoles(Claims claims) {
-        System.out.println(claims.get("roles"));
-//        List<String> roleNames = claims.get("roles", List.class);
-
         List<HashMap<String, Object>> roleMaps = claims.get("roles", List.class);
 
         Set<Role> roles = new HashSet<>();
@@ -63,7 +60,6 @@ public class JwtFilter extends GenericFilterBean {
             if (jwtProvider.validateAccessToken(token)) {
                 Claims claims = jwtProvider.getAcessClaims(token);
                 JwtAuthentication jwtAuthentication = generate(claims);
-                System.out.println(claims);
                 jwtAuthentication.setAuthenticated(true);
                 SecurityContextHolder.getContext().setAuthentication(jwtAuthentication);
             }

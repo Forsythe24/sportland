@@ -37,7 +37,6 @@ public class AuthController {
 
     @PostMapping("refresh")
     public ResponseEntity<JwtResponse> refresh(@RequestBody RefreshJwtRequest jwtRequest) throws AuthException {
-        System.out.println(jwtRequest.getToken());
        return ResponseEntity.ok(authService.refresh(jwtRequest.getToken()));
     }
 

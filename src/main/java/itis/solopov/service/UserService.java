@@ -1,6 +1,5 @@
 package itis.solopov.service;
 
-import itis.solopov.config.MailConfig;
 import itis.solopov.dto.UpdatePasswordRequestDto;
 import itis.solopov.dto.UpdateUserRequestDto;
 import itis.solopov.dto.UserDto;
@@ -13,7 +12,6 @@ import itis.solopov.repository.UserRepository;
 import itis.solopov.service.exception.SportNotFoundException;
 import itis.solopov.service.exception.UserNotFoundException;
 import itis.solopov.util.Constants;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +25,7 @@ public class UserService {
     private final ChatRepository chatRepository;
     private final BCryptPasswordEncoder encoder;
 
-    public UserService(UserRepository userRepository, MailConfig mailConfig, JavaMailSender javaMailSender, SportRepository sportRepository, ChatRepository chatRepository, BCryptPasswordEncoder encoder) {
+    public UserService(UserRepository userRepository, SportRepository sportRepository, ChatRepository chatRepository, BCryptPasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.sportRepository = sportRepository;
         this.chatRepository = chatRepository;

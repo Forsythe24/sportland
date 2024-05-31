@@ -11,7 +11,7 @@ plugins {
 apply(plugin = "io.spring.dependency-management")
 
 application {
-    mainClass.set("itis.solopov.Main")
+    mainClass.set("itis.solopov.Application")
 }
 
 group = "itis.solopov"

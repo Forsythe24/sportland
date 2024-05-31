@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:16.0-alpine
+    network_mode: bridge
+    container_name: postgres
+    volumes:
+      - postgres-data:/var/lib/postgres/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=stilinski
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=semester
+    restart: unless-stopped
+
+  spring:
+    image: app
+    network_mode: bridge
+    container_name: semester-work-Forsythe24
+    environment:
+      - SPRING_DATASOURCE_URL = jdbc:postgresql://postgres:5432/semester
+      - SPRING_LIQUIBASE_URL = jdbc:postgresql://postgres:5432/semester
+      - SPRING_LIQUIBASE_ENABLED = true
+    expose:
+      - 8080
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    links:
+      - postgres
+
+volumes:
+  postgres-data:

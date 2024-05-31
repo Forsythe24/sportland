@@ -7,6 +7,7 @@ import itis.solopov.dto.UserDto;
 import itis.solopov.dto.VerifyCredentialsRequestDto;
 import itis.solopov.model.Sport;
 import itis.solopov.model.User;
+import itis.solopov.repository.ChatRepository;
 import itis.solopov.repository.SportRepository;
 import itis.solopov.repository.UserRepository;
 import itis.solopov.service.exception.SportNotFoundException;
@@ -23,11 +24,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final SportRepository sportRepository;
+    private final ChatRepository chatRepository;
     private final BCryptPasswordEncoder encoder;
 
-    public UserService(UserRepository userRepository, MailConfig mailConfig, JavaMailSender javaMailSender, SportRepository sportRepository, BCryptPasswordEncoder encoder) {
+    public UserService(UserRepository userRepository, MailConfig mailConfig, JavaMailSender javaMailSender, SportRepository sportRepository, ChatRepository chatRepository, BCryptPasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.sportRepository = sportRepository;
+        this.chatRepository = chatRepository;
         this.encoder = encoder;
     }
 
@@ -55,6 +58,8 @@ public class UserService {
 
     public Boolean deleteUserById(String id) {
         userRepository.deleteById(id);
+        chatRepository.deleteAllChatUsers(id);
+        chatRepository.deleteAllChatsByUserId(id);
         return true;
     }
 

@@ -20,7 +20,6 @@ public class CreateUserRequestDto {
     private String password;
 
 
-    @NotBlank
     private Integer age;
 
     @NotBlank

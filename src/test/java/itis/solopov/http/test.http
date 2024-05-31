@@ -3,9 +3,9 @@ POST http://localhost:8080/api/auth/sign_up
 Content-Type: application/json
 
 {
-  "id": "sldkfjsdjk",
- "email": "aisylu@gmail.com",
- "password": "stilinski",
+  "id": "",
+ "email": "miron@gmail.com",
+ "password": "@Solopov",
  "age": 18,
  "gender": "F",
  "name": "Lena"
@@ -16,11 +16,12 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
- "username": "aisylu@gmail.com",
- "password": "stilinski"
+ "username": "miron@gmail.com",
+ "password": "@Solopov"
 }
 
-### test instructors api
+### test retrieving instructors data
 GET http://localhost:8080/api/instructors/1
 
-###
+### test deleting profile
+GET http://localhost:8080/api/user/delete

@@ -1,5 +1,7 @@
 package itis.solopov.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,13 +20,21 @@ public class Message {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "chat_id")
-    private String chatId;
-
     @Column(name = "sender_id")
     private String senderId;
 
     private String text;
 
     private String date;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    @ManyToOne
+    @JoinTable(
+            name = "message_chat",
+            joinColumns = @JoinColumn(name = "message_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "chat_id", referencedColumnName = "id")
+    )
+    private Chat chat;
 }

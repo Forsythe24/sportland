@@ -18,7 +18,6 @@ public class UpdateUserRequestDto {
     private String password;
 
 
-    @NotBlank
     private Integer age;
 
     @NotBlank

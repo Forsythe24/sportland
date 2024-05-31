@@ -10,6 +10,12 @@ import java.util.Optional;
 public interface ChatRepository extends JpaRepository<Chat, String> {
     Optional<Chat> findById(String id);
 
-    @Query(value = "select * from chat c where c.user_id = ?1", nativeQuery = true)
+    @Query(value = "select c from Chat c where c.user.id = :userId")
     List<Chat> findAllByUserId(String userId);
+
+    @Query(value = "DELETE FROM chat WHERE id LIKE '%' || ?1 || '%'", nativeQuery = true)
+    void deleteAllChatsByUserId(String userId);
+
+    @Query(value = "DELETE FROM chat_user WHERE chat_id LIKE '%' || ?1 || '%'", nativeQuery = true)
+    void deleteAllChatUsers(String userId);
 }

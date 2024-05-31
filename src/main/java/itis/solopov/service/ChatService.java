@@ -5,10 +5,14 @@ import itis.solopov.dto.CreateMessageRequestDto;
 import itis.solopov.dto.MessageDto;
 import itis.solopov.model.Chat;
 import itis.solopov.model.Message;
+import itis.solopov.model.User;
 import itis.solopov.repository.ChatRepository;
 import itis.solopov.repository.MessageRepository;
+import itis.solopov.repository.UserRepository;
 import itis.solopov.service.exception.ChatAlreadyExistsException;
 import itis.solopov.service.exception.ChatNotFoundException;
+import itis.solopov.service.exception.UserNotFoundException;
+import itis.solopov.util.Constants;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +25,23 @@ public class ChatService {
 
     private final MessageRepository messageRepository;
 
-    public ChatService(ChatRepository chatRepository, MessageRepository messageRepository) {
+    private final UserRepository userRepository;
+
+    public ChatService(ChatRepository chatRepository, MessageRepository messageRepository, UserRepository userRepository) {
         this.chatRepository = chatRepository;
         this.messageRepository = messageRepository;
+        this.userRepository = userRepository;
     }
 
     public Boolean createChat(CreateChatRequestDto dto) {
         Chat chat = new Chat();
 
         chat.setId(dto.getId());
-        chat.setUserId(dto.getUserId());
+
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(String.format(Constants.USER_NOT_FOUND_EXCEPTION_ID_TEMPLATE, dto.getId())));
+
+        chat.setUser(user);
 
         try {
             chatRepository.save(chat);
@@ -53,8 +64,11 @@ public class ChatService {
         Message message = new Message();
         message.setText(dto.getText());
         message.setDate(dto.getDate());
-        message.setChatId(dto.getChatId());
         message.setSenderId(dto.getSenderId());
+
+        Chat chat = chatRepository.findById(dto.getChatId())
+                .orElseThrow(() -> new ChatNotFoundException("Couldn't find chat with such id"));
+        message.setChat(chat);
 
         return messageRepository.save(message);
     }
@@ -63,7 +77,6 @@ public class ChatService {
         return messageRepository.getAllByChatId(chatId).stream().map(message -> {
                     MessageDto dto = new MessageDto();
                     dto.setId(message.getId());
-                    dto.setChatId(message.getChatId());
                     dto.setSenderId(message.getSenderId());
                     dto.setText(message.getText());
                     dto.setDate(message.getDate());

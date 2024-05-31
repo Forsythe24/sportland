@@ -23,7 +23,6 @@ import java.util.List;
 
 @Tag(name = "Chat")
 @RestController
-@PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
 @RequestMapping("api/chat")
 public class ChatController {
 
@@ -36,24 +35,28 @@ public class ChatController {
         this.authManager = authManager;
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @Operation(description = "Get chat by id")
     @GetMapping("{id}")
     public ResponseEntity<Chat> getChatById(@PathVariable String id) {
         return ResponseEntity.ok(chatService.getChatById(id));
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @Operation(description = "Create a new chat")
     @PostMapping("create")
     public ResponseEntity<Boolean> createChat(@RequestBody CreateChatRequestDto requestDto) {
         return ResponseEntity.ok(chatService.createChat(requestDto));
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @Operation(description = "Create a new message")
     @PostMapping("add_message")
     public ResponseEntity<Message> createMessage(@RequestBody @Validated CreateMessageRequestDto requestDto) {
         return ResponseEntity.ok(chatService.createMessage(requestDto));
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @Operation(description = "Get all chats by user id")
     @GetMapping("all")
     public ResponseEntity<List<Chat>> getAllChatsByUserId() {
@@ -67,12 +70,14 @@ public class ChatController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @Operation(description = "Get all the messages of the chat by providing its's id")
     @GetMapping("{chatId}/messages")
     public ResponseEntity<List<MessageDto>> getAllMessagesByChatId(@PathVariable String chatId) {
         return ResponseEntity.ok(chatService.getAllMessagesByChatId(chatId));
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @Operation(description = "Get last message of the chat by providing its' id")
     @GetMapping("{chatId}/last_message")
     public ResponseEntity<Message> getLastMessageByChatId(@PathVariable String chatId) {
@@ -81,7 +86,7 @@ public class ChatController {
 
     @MessageMapping("/chat/{chatId}/add_message")
     @SendTo("/topic/chat/{chatId}/messages")
-    public MessageDto message(@Validated MessageDto message) {
+    public MessageDto message(MessageDto message) {
         return message;
     }
 }
